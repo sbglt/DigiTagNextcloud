@@ -8,6 +8,7 @@ from digikam4_model import Tags, ImageTagProperties, Images, Albums
 def check_person_unicity_for_digikam(dgk_session):
     debut = time.time()
 
+    number = 0
     has_problem = False
 
     # Lister les Tags dont Tags.pid=4 (person)
@@ -22,6 +23,7 @@ def check_person_unicity_for_digikam(dgk_session):
     person_dict = dict()
 
     for dgk_tag in dgk_tags:
+        number = number + 1
         person = person_dict.get(dgk_tag.name)
         if person is None:
             person_dict[dgk_tag.name] = dgk_tag.name
@@ -37,22 +39,29 @@ def check_person_unicity_for_digikam(dgk_session):
 def check_person_unicity_for_each_image(dgk_session):
     debut = time.time()
     has_problem = False
+    number = 0
 
-    images_tag_properties = (dgk_session.query(ImageTagProperties).filter(
+    images_tag_properties = (dgk_session.query(ImageTagProperties)
+    .filter(
         ImageTagProperties.property == 'tagRegion' or ImageTagProperties.property == 'faceToTrain')
     )
     image_tag_dict = dict()
 
     for imageTagProperties in images_tag_properties:
-        image_tag = image_tag_dict.get(imageTagProperties.imageid + "-" + imageTagProperties.tagid)
-        if image_tag is None:
-            image_tag[imageTagProperties.imageid + "-" + imageTagProperties.tagid] = (
-                    imageTagProperties.imageid + "-" + imageTagProperties.tagid)
+        number = number + 1
+        if imageTagProperties.imageid is not None and imageTagProperties.tagid is not None:
+            image_tag = image_tag_dict.get(str(imageTagProperties.imageid) + "-" + str(imageTagProperties.tagid))
+            if image_tag is None:
+                image_tag_dict[str(imageTagProperties.imageid) + "-" + str(imageTagProperties.tagid)] = (
+                        str(imageTagProperties.imageid) + "-" + str(imageTagProperties.tagid))
+            else:
+                print(
+                    "checkPersonUnicityForEachImage : Doublon : ImageId=" + imageTagProperties.imageid
+                    + ", TagId=" + imageTagProperties.tagid)
+                has_problem = True
         else:
             print(
-                "checkPersonUnicityForEachImage : Doublon : ImageId=" + imageTagProperties.imageid
-                + ", TagId=" + imageTagProperties.tagid)
-            has_problem = True
+                "checkPersonUnicityForEachImage : " + "imageTagProperties.imageid ou imageTagProperties.tagid est None")
 
     print("checkPersonUnicityForEachImage : " + time.ctime(time.time() - debut)[11:19])
 
