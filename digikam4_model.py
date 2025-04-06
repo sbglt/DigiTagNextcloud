@@ -139,6 +139,7 @@ class ImageTagProperties(Base):
     property: Mapped[Optional[str]] = mapped_column(Text)
     value: Mapped[Optional[str]] = mapped_column(Text)
 
+
 class ImagePositions(Base):
     __tablename__ = 'ImagePositions'
 
