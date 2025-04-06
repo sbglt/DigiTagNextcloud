@@ -121,8 +121,7 @@ def sync_faces(NEXTCLOUD_USER, NEXTCLOUD_ROOTPATH, NEXTCLOUD_RECOGNIZE_MODEL, nc
         # Traiter les ImagesTagProperties avec ImagesTagProperties.tagid = Tags.id
         imagesTagProperties = (dgk_session.query(ImageTagProperties, Images.id, Images.name, Albums.relativePath)
                                .filter(ImageTagProperties.tagid == dgk_tag.id)
-                               .filter(
-            ImageTagProperties.property == 'tagRegion' or ImageTagProperties.property == 'faceToTrain')
+                               .filter(ImageTagProperties.property == 'tagRegion')
                                .join(Images, Images.id == ImageTagProperties.imageid)
                                .join(Albums, Albums.id == Images.album)
                                )

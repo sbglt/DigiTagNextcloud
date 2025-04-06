@@ -135,7 +135,7 @@ class ImageMetadata(Base):
 class ImageTagProperties(Base):
     __tablename__ = 'ImageTagProperties'
     imageid: Mapped[Optional[int]] = mapped_column(Integer, primary_key=True)
-    tagid: Mapped[Optional[int]] = mapped_column(Integer)
+    tagid: Mapped[Optional[int]] = mapped_column(Integer, primary_key=True)
     property: Mapped[Optional[str]] = mapped_column(Text)
     value: Mapped[Optional[str]] = mapped_column(Text)
 
