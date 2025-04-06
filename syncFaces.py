@@ -94,7 +94,7 @@ def sync_faces(NEXTCLOUD_USER, NEXTCLOUD_ROOTPATH, NEXTCLOUD_RECOGNIZE_MODEL, nc
     oc_facerecog_images_bypath_dict = {filecache.path: image for image, filecache in results}
 
     # Lister tous les oc_facerecog_faces et créer une clé avec oc_facerecog_images.id et oc_facerecog_persons.id
-    oc_facerecog_faces_by_image_person_dict = {p.image + "-" + p.person: p for p in nc_session.query(OcFacerecogFaces)
+    oc_facerecog_faces_by_image_person_dict = {str(p.image) + "-" + str(p.person): p for p in nc_session.query(OcFacerecogFaces)
     .join(OcFacerecogImages, OcFacerecogImages.id == OcFacerecogFaces.image)
     .filter(OcFacerecogImages.user == NEXTCLOUD_USER)}
 
@@ -139,7 +139,7 @@ def sync_faces(NEXTCLOUD_USER, NEXTCLOUD_ROOTPATH, NEXTCLOUD_RECOGNIZE_MODEL, nc
             if oc_facerecog_image is not None:
                 # Est-ce que l'image comporte un tag pour cette personne
                 oc_facerecog_face = oc_facerecog_faces_by_image_person_dict.get(
-                    oc_facerecog_image.id + "-" + oc_facerecog_person.id)
+                    str(oc_facerecog_image.id) + "-" + str(oc_facerecog_person.id))
 
                 create_new_oc_facerecog_face = True
                 if oc_facerecog_face is not None:
@@ -184,7 +184,7 @@ def sync_faces(NEXTCLOUD_USER, NEXTCLOUD_ROOTPATH, NEXTCLOUD_RECOGNIZE_MODEL, nc
 
     # Parcourir les oc_facerecog_faces existants non traités
     for f in oc_facerecog_faces_by_image_person_dict:
-        print("Suppression face : " + f.id)
+        print("Suppression face : " + str(f.id))
         nc_session.delete(f)
 
     # Parcourir les oc_facerecog_persons non traités
