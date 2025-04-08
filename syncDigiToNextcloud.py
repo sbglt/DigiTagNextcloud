@@ -1,3 +1,5 @@
+import time
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -7,7 +9,9 @@ from syncFaces import sync_faces, create_all_facerecog_persons, create_all_facer
 NEXTCLOUD_USER = 'NEXTCLOUD_USER'
 NEXTCLOUD_ROOTPATH = 'NEXTCLOUD_ROOT_PATH'
 NEXTCLOUD_RECOGNIZE_MODEL = 1
-NEXTCLOUD_STORAGE = 2
+NEXTCLOUD_STORAGE = 9
+
+debut = time.time()
 
 # Connexion à Nextcloud (MySQL)
 NEXTCLOUD_DATABASE_URL = "mysql+pymysql://DATABASE_CREDENTIALS"
@@ -38,3 +42,4 @@ else:
 
 nc_session.close()
 dgk_session.close()
+print(f"Main : {time.time() - debut:.2f} secondes")

@@ -11,6 +11,7 @@ from nextcloud_model import OcFacerecogPersons, OcFacerecogFaces, OcFilecache, O
 
 BATCH_SIZE = 1000
 
+
 def create_all_facerecog_persons(NEXTCLOUD_USER, nc_session, dgk_session):
     debut = time.time()
     now = datetime.now()
@@ -36,7 +37,7 @@ def create_all_facerecog_persons(NEXTCLOUD_USER, nc_session, dgk_session):
             nc_session.add(oc_facerecog_person_new)
     nc_session.commit()
 
-    print("createAllFacerecogPersons : " + time.ctime(time.time() - debut)[11:19])
+    print(f"createAllFacerecogPersons : {time.time() - debut:.2f} secondes")
 
 
 def create_all_facerecog_images(NEXTCLOUD_USER, NEXTCLOUD_ROOTPATH, NEXTCLOUD_RECOGNIZE_MODEL, NEXTCLOUD_STORAGE,
@@ -47,8 +48,7 @@ def create_all_facerecog_images(NEXTCLOUD_USER, NEXTCLOUD_ROOTPATH, NEXTCLOUD_RE
 
     # Lister les ImagesTagProperties
     imagesTagProperties = (dgk_session.query(ImageTagProperties, Images.id, Images.name, Albums.relativePath)
-                           .filter(
-        ImageTagProperties.property == 'tagRegion' or ImageTagProperties.property == 'faceToTrain')
+                           .filter(ImageTagProperties.property == 'tagRegion')
                            .join(Images, Images.id == ImageTagProperties.imageid)
                            .join(Albums, Albums.id == Images.album))
 
@@ -93,7 +93,7 @@ def create_all_facerecog_images(NEXTCLOUD_USER, NEXTCLOUD_ROOTPATH, NEXTCLOUD_RE
         nc_session.rollback()
         print(f"Erreur pendant commit final : {e}")
 
-    print("createAllFacerecogImages : " + time.ctime(time.time() - debut)[11:19])
+    print(f"createAllFacerecogImages : {time.time() - debut:.2f} secondes")
 
 
 def sync_faces(NEXTCLOUD_USER, NEXTCLOUD_ROOTPATH, NEXTCLOUD_RECOGNIZE_MODEL, nc_session, dgk_session):
@@ -135,7 +135,7 @@ def sync_faces(NEXTCLOUD_USER, NEXTCLOUD_ROOTPATH, NEXTCLOUD_RECOGNIZE_MODEL, nc
         oc_facerecog_person = oc_facerecog_persons_dict.get(dgk_tag.name)
 
         # Lister les oc_facerecog_faces dont oc_facerecog_faces.person = oc_facerecog_persons.id
-        #oc_facerecog_faces_to_delete = list(nc_session.query(OcFacerecogFaces)
+        # oc_facerecog_faces_to_delete = list(nc_session.query(OcFacerecogFaces)
         #                                    .filter(OcFacerecogFaces.person == oc_facerecog_person.id))
 
         # Traiter les ImagesTagProperties avec ImagesTagProperties.tagid = Tags.id
@@ -174,7 +174,8 @@ def sync_faces(NEXTCLOUD_USER, NEXTCLOUD_ROOTPATH, NEXTCLOUD_RECOGNIZE_MODEL, nc
                     else:
                         # Retirer oc_facerecog_faces.id de la liste des oc_facerecog_faces non traités
                         create_new_oc_facerecog_face = False
-                        oc_facerecog_faces_by_image_person_dict.pop(str(oc_facerecog_face.image) + "-" + str(oc_facerecog_face.person))
+                        oc_facerecog_faces_by_image_person_dict.pop(
+                            str(oc_facerecog_face.image) + "-" + str(oc_facerecog_face.person))
 
                 # Si aucun oc_facerecog_faces, créer un couple oc_facerecog_faces et oc_facerecog_images
                 if create_new_oc_facerecog_face:
@@ -208,9 +209,6 @@ def sync_faces(NEXTCLOUD_USER, NEXTCLOUD_ROOTPATH, NEXTCLOUD_RECOGNIZE_MODEL, nc
         # Retirer la personne de la liste des personnes à traiter
         oc_facerecog_persons_dict.pop(oc_facerecog_person.name)
 
-
-
-
     # Parcourir les oc_facerecog_faces existants non traités
     for f in oc_facerecog_faces_by_image_person_dict:
         print("Suppression face : " + str(oc_facerecog_faces_by_image_person_dict[f].id))
@@ -242,5 +240,5 @@ def sync_faces(NEXTCLOUD_USER, NEXTCLOUD_ROOTPATH, NEXTCLOUD_RECOGNIZE_MODEL, nc
         nc_session.rollback()
         print(f"Erreur pendant commit final : {e}")
 
-    print("sync_faces : " + time.ctime(time.time() - debut)[11:19])
+    print(f"sync_faces :  {time.time() - debut:.2f} secondes")
     print("sync_faces : Terminé")
