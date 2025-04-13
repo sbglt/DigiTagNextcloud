@@ -5,9 +5,9 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from checkDigikamFaceTags import check_person_unicity_for_digikam, check_person_unicity_for_each_image
-from syncFaces import sync_faces, create_all_facerecog_persons, create_all_facerecog_images
-from syncTagsAsAlbums import create_all_oc_photos_albums
+from sync_faces.checkDigikamFaceTags import check_person_unicity_for_digikam, check_person_unicity_for_each_image
+from sync_faces.syncFaces import sync_faces, create_all_facerecog_persons, create_all_facerecog_images
+from sync_albums.syncTagsAsAlbums import create_all_oc_photos_albums
 
 from dotenv import load_dotenv  # Pour la gestion de l'environnement DEVELOPPEMENT/PROD
 env_path = load_dotenv()

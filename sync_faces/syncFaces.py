@@ -5,9 +5,9 @@ import xml.etree.ElementTree as ET
 
 from sqlalchemy.orm import aliased
 
-from digikam4_model import Tags, ImageTagProperties, Images, Albums
+from models.digikam4_model import Tags, ImageTagProperties, Images, Albums
 from face import Rect
-from nextcloud_model import OcFacerecogPersons, OcFacerecogFaces, OcFilecache, OcFacerecogImages
+from models.nextcloud_model import OcFacerecogPersons, OcFacerecogFaces, OcFilecache, OcFacerecogImages
 
 BATCH_SIZE = 1000
 

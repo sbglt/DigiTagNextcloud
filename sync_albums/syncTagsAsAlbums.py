@@ -1,12 +1,8 @@
-import json
 import time
 from datetime import datetime
-import xml.etree.ElementTree as ET
 
-from sqlalchemy.orm import aliased
-
-from digikam4_model import Tags, ImageTags, Images, Albums
-from nextcloud_model import OcPhotosAlbums, OcFilecache, OcPhotosAlbumsFiles
+from models.digikam4_model import Tags, ImageTags, Images, Albums
+from models.nextcloud_model import OcPhotosAlbums, OcFilecache, OcPhotosAlbumsFiles
 
 BATCH_SIZE = 1000
 

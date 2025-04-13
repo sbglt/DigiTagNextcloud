@@ -1,10 +1,8 @@
-import json
 import time
-from datetime import datetime
 
 from sqlalchemy import func
 from sqlalchemy.orm import aliased
-from digikam4_model import Tags, ImageTagProperties, Images, Albums
+from models.digikam4_model import Tags, ImageTagProperties, Images, Albums
 
 
 # ImageTagProperties NON CONFIRME
