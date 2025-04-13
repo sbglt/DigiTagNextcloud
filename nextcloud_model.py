@@ -427,7 +427,7 @@ class OcPhotosAlbums(Base):
         Index('pa_user', 'user'),
     )
 
-    album_id: Mapped[int] = mapped_column(BIGINT(20), primary_key=True)
+    album_id: Mapped[int] = mapped_column(BIGINT(20), primary_key=True, autoincrement=True)
     name: Mapped[str] = mapped_column(String(255))
     user: Mapped[str] = mapped_column(String(255))
     created: Mapped[int] = mapped_column(BIGINT(20))
@@ -454,9 +454,9 @@ class OcPhotosAlbumsFiles(Base):
         Index('paf_folder', 'album_id')
     )
 
-    album_file_id: Mapped[int] = mapped_column(BIGINT(20), primary_key=True)
-    album_id: Mapped[int] = mapped_column(BIGINT(20))
-    file_id: Mapped[int] = mapped_column(BIGINT(20))
+    album_file_id: Mapped[int] = mapped_column(BIGINT(20), primary_key=True, autoincrement=True)
+    album_id: Mapped[int] = mapped_column(BIGINT(20), primary_key=True)
+    file_id: Mapped[int] = mapped_column(BIGINT(20), primary_key=True)
     added: Mapped[int] = mapped_column(BIGINT(20))
     owner: Mapped[Optional[str]] = mapped_column(String(64))
 
