@@ -177,16 +177,17 @@ t_ImageRelations = Table(
 )
 
 
+class ImageTags(Base):
+    __tablename__ = 'ImageTags'
+    __table_args__ = (
+        UniqueConstraint('imageid', 'tagid'),
+        Index('tag_id_index', 'imageid'),
+        Index('tag_index', 'tagid')
+    )
 
+    imageid: Mapped[Optional[int]] = mapped_column(Integer, primary_key=True)
+    tagid: Mapped[Optional[int]] = mapped_column(Integer, primary_key=True)
 
-t_ImageTags = Table(
-    'ImageTags', Base.metadata,
-    Column('imageid', Integer, nullable=False),
-    Column('tagid', Integer, nullable=False),
-    UniqueConstraint('imageid', 'tagid'),
-    Index('tag_id_index', 'imageid'),
-    Index('tag_index', 'tagid')
-)
 
 
 class Images(Base):
